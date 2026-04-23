@@ -3,30 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>InfoSec Quiz — Chapters 9–12</title>
+    <title>InfoSec Quiz — Chapters 5–8</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
       rel="stylesheet"
     />
     <style>
       :root {
-        --bg: #0b0e1a;
-        --surface: #131729;
-        --surface2: #1b2035;
-        --border: #252c45;
+        --bg: #0d0f1a;
+        --surface: #151828;
+        --card: #1c2035;
+        --border: #2a2f4a;
         --accent: #4f8ef7;
-        --accent2: #7c5ef7;
-        --success: #2dd4a0;
-        --danger: #f76a6a;
-        --warn: #f7c94f;
-        --text: #e8eaf6;
-        --muted: #7a86a8;
+        --accent2: #a78bfa;
+        --success: #34d399;
+        --danger: #f87171;
+        --warning: #fbbf24;
+        --text: #e2e8f0;
+        --muted: #8892b0;
+        --font-head: "Syne", sans-serif;
         --font-mono: "Space Mono", monospace;
-        --font-body: "DM Sans", sans-serif;
       }
 
       * {
@@ -38,1550 +42,1745 @@
       body {
         background: var(--bg);
         color: var(--text);
-        font-family: var(--font-body);
+        font-family: var(--font-head);
         min-height: 100vh;
+        position: relative;
         overflow-x: hidden;
       }
 
-      /* BG grid effect */
       body::before {
         content: "";
         position: fixed;
-        inset: 0;
-        background-image:
-          linear-gradient(rgba(79, 142, 247, 0.04) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(79, 142, 247, 0.04) 1px, transparent 1px);
-        background-size: 40px 40px;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background:
+          radial-gradient(
+            ellipse at 20% 20%,
+            rgba(79, 142, 247, 0.06) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            ellipse at 80% 80%,
+            rgba(167, 139, 250, 0.05) 0%,
+            transparent 50%
+          );
         pointer-events: none;
         z-index: 0;
       }
 
-      .quiz-wrapper {
+      .page-wrap {
         position: relative;
         z-index: 1;
-        max-width: 780px;
-        margin: 0 auto;
-        padding: 24px 16px 80px;
       }
 
-      /* ——— HEADER ——— */
+      /* ── HEADER ── */
       .quiz-header {
-        text-align: center;
-        padding: 40px 0 32px;
-      }
-      .quiz-header .tag {
-        display: inline-block;
-        font-family: var(--font-mono);
-        font-size: 0.7rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--accent);
-        border: 1px solid var(--accent);
-        padding: 4px 12px;
-        border-radius: 2px;
-        margin-bottom: 14px;
+        background: linear-gradient(135deg, #0f1629 0%, #1a1f3a 100%);
+        border-bottom: 1px solid var(--border);
+        padding: 1.5rem 0;
       }
       .quiz-header h1 {
-        font-family: var(--font-mono);
-        font-size: clamp(1.6rem, 5vw, 2.4rem);
-        font-weight: 700;
-        line-height: 1.1;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
+        font-size: 1.6rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
-      .quiz-header p {
+      .quiz-header .badge-chip {
+        background: var(--border);
         color: var(--muted);
-        font-size: 0.9rem;
-        margin-top: 8px;
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: 999px;
+        border: 1px solid var(--border);
       }
 
-      /* ——— PROGRESS ——— */
-      .progress-bar-wrap {
-        background: var(--surface2);
-        border-radius: 999px;
-        height: 6px;
-        margin-bottom: 6px;
+      /* ── PROGRESS ── */
+      .progress-wrap {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border);
+        padding: 0.9rem 0;
+      }
+      .progress-bar-track {
+        height: 5px;
+        background: var(--border);
+        border-radius: 99px;
         overflow: hidden;
       }
       .progress-bar-fill {
         height: 100%;
-        border-radius: 999px;
         background: linear-gradient(90deg, var(--accent), var(--accent2));
+        border-radius: 99px;
         transition: width 0.4s ease;
       }
-      .progress-meta {
-        display: flex;
-        justify-content: space-between;
+      .q-counter {
         font-family: var(--font-mono);
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         color: var(--muted);
-        margin-bottom: 20px;
+      }
+      .score-badge {
+        font-family: var(--font-mono);
+        font-size: 0.8rem;
+        color: var(--accent);
+        background: rgba(79, 142, 247, 0.12);
+        padding: 0.2rem 0.6rem;
+        border-radius: 6px;
       }
 
-      /* ——— CARD ——— */
-      .question-card {
+      /* ── SCREENS ── */
+      #start-screen,
+      #quiz-screen,
+      #result-screen {
+        display: none;
+      }
+      #start-screen.active,
+      #quiz-screen.active,
+      #result-screen.active {
+        display: block;
+      }
+
+      /* ── START SCREEN ── */
+      .start-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 3rem 2.5rem;
+        text-align: center;
+        max-width: 560px;
+        margin: 5rem auto 0;
+      }
+      .start-icon {
+        width: 72px;
+        height: 72px;
+        background: linear-gradient(
+          135deg,
+          rgba(79, 142, 247, 0.2),
+          rgba(167, 139, 250, 0.2)
+        );
+        border: 1px solid rgba(79, 142, 247, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+      }
+      .start-card h2 {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+      }
+      .start-card p {
+        color: var(--muted);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+      .info-item {
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: 12px;
-        padding: 28px 28px 24px;
-        position: relative;
-        overflow: hidden;
-        animation: slideUp 0.3s ease;
+        padding: 1rem;
+        text-align: center;
       }
-      @keyframes slideUp {
+      .info-item .val {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--accent);
+      }
+      .info-item .lbl {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-top: 0.2rem;
+      }
+
+      /* ── QUESTION CARD ── */
+      .q-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 2rem;
+        animation: slideIn 0.35s ease;
+      }
+      @keyframes slideIn {
         from {
           opacity: 0;
-          transform: translateY(16px);
+          transform: translateY(14px);
         }
         to {
           opacity: 1;
           transform: translateY(0);
         }
       }
-      .question-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--accent), var(--accent2));
-      }
 
-      .q-chapter-badge {
+      .chapter-tag {
         display: inline-block;
         font-family: var(--font-mono);
-        font-size: 0.65rem;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: var(--accent);
-        background: rgba(79, 142, 247, 0.1);
-        border: 1px solid rgba(79, 142, 247, 0.25);
-        padding: 3px 10px;
-        border-radius: 2px;
-        margin-bottom: 14px;
-      }
-
-      .q-number {
-        font-family: var(--font-mono);
         font-size: 0.7rem;
-        color: var(--muted);
-        margin-bottom: 8px;
+        padding: 0.25rem 0.65rem;
+        border-radius: 999px;
+        margin-bottom: 1rem;
+        border: 1px solid;
+      }
+      .ch5 {
+        color: #60a5fa;
+        border-color: rgba(96, 165, 250, 0.35);
+        background: rgba(96, 165, 250, 0.08);
+      }
+      .ch6 {
+        color: #a78bfa;
+        border-color: rgba(167, 139, 250, 0.35);
+        background: rgba(167, 139, 250, 0.08);
+      }
+      .ch7 {
+        color: #34d399;
+        border-color: rgba(52, 211, 153, 0.35);
+        background: rgba(52, 211, 153, 0.08);
+      }
+      .ch8 {
+        color: #fbbf24;
+        border-color: rgba(251, 191, 36, 0.35);
+        background: rgba(251, 191, 36, 0.08);
       }
 
       .q-text {
         font-size: 1.05rem;
-        font-weight: 500;
-        line-height: 1.55;
+        font-weight: 600;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
         color: var(--text);
-        margin-bottom: 22px;
       }
 
-      /* ——— CHOICES ——— */
-      .choices-list {
-        list-style: none;
+      .choices {
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 0.75rem;
       }
 
       .choice-btn {
-        width: 100%;
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 13px 16px;
-        text-align: left;
+        background: var(--surface);
+        border: 2px solid var(--border);
+        border-radius: 12px;
+        padding: 0.95rem 1.2rem;
         color: var(--text);
-        font-family: var(--font-body);
+        font-family: var(--font-head);
         font-size: 0.92rem;
+        text-align: left;
         cursor: pointer;
-        transition:
-          border-color 0.15s,
-          background 0.15s,
-          transform 0.1s;
+        transition: all 0.2s ease;
         display: flex;
         align-items: center;
-        gap: 12px;
+        gap: 0.75rem;
+        position: relative;
+        overflow: hidden;
       }
-      .choice-btn:hover:not(:disabled) {
+      .choice-btn:hover:not(.locked) {
         border-color: var(--accent);
         background: rgba(79, 142, 247, 0.08);
         transform: translateX(3px);
       }
       .choice-btn .choice-letter {
-        flex-shrink: 0;
-        width: 26px;
-        height: 26px;
-        border-radius: 4px;
+        min-width: 30px;
+        height: 30px;
         background: var(--border);
-        border: 1px solid var(--muted);
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-family: var(--font-mono);
-        font-size: 0.7rem;
+        font-size: 0.75rem;
         font-weight: 700;
-        color: var(--muted);
-        transition: all 0.15s;
-      }
-      .choice-btn:hover:not(:disabled) .choice-letter {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #fff;
+        transition: all 0.2s;
       }
       .choice-btn.selected {
         border-color: var(--accent);
-        background: rgba(79, 142, 247, 0.12);
+        background: rgba(79, 142, 247, 0.1);
       }
       .choice-btn.selected .choice-letter {
         background: var(--accent);
-        border-color: var(--accent);
         color: #fff;
       }
       .choice-btn.correct {
         border-color: var(--success) !important;
-        background: rgba(45, 212, 160, 0.1) !important;
+        background: rgba(52, 211, 153, 0.1) !important;
       }
       .choice-btn.correct .choice-letter {
         background: var(--success) !important;
-        border-color: var(--success) !important;
-        color: #fff !important;
+        color: #0d0f1a;
       }
       .choice-btn.wrong {
         border-color: var(--danger) !important;
-        background: rgba(247, 106, 106, 0.1) !important;
+        background: rgba(248, 113, 113, 0.1) !important;
       }
       .choice-btn.wrong .choice-letter {
         background: var(--danger) !important;
-        border-color: var(--danger) !important;
-        color: #fff !important;
+        color: #fff;
       }
-      .choice-btn:disabled {
-        cursor: not-allowed;
+      .choice-btn.locked {
+        cursor: default;
       }
 
-      /* feedback */
-      .feedback-msg {
+      .result-icon {
+        margin-left: auto;
+        font-size: 1.1rem;
         display: none;
-        margin-top: 14px;
-        font-size: 0.85rem;
-        padding: 10px 14px;
-        border-radius: 6px;
-        font-family: var(--font-mono);
       }
-      .feedback-msg.correct {
-        background: rgba(45, 212, 160, 0.1);
-        border: 1px solid rgba(45, 212, 160, 0.3);
+      .choice-btn.correct .result-icon,
+      .choice-btn.wrong .result-icon {
+        display: block;
+      }
+      .choice-btn.correct .result-icon {
         color: var(--success);
       }
-      .feedback-msg.wrong {
-        background: rgba(247, 106, 106, 0.1);
-        border: 1px solid rgba(247, 106, 106, 0.3);
+      .choice-btn.wrong .result-icon {
         color: var(--danger);
       }
 
-      /* ——— NAV BUTTONS ——— */
-      .nav-row {
+      /* ── NAV BUTTONS ── */
+      .nav-wrap {
         display: flex;
-        gap: 10px;
-        margin-top: 20px;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
         flex-wrap: wrap;
       }
       .btn-nav {
-        flex: 1;
-        padding: 11px 18px;
-        border-radius: 8px;
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
-        font-weight: 700;
-        letter-spacing: 0.05em;
-        text-transform: uppercase;
-        cursor: pointer;
-        border: 1px solid var(--border);
-        transition: all 0.15s;
-      }
-      .btn-back {
-        background: var(--surface2);
-        color: var(--muted);
-      }
-      .btn-back:hover:not(:disabled) {
-        border-color: var(--accent2);
-        color: var(--accent2);
-      }
-      .btn-next {
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-        color: #fff;
-        border: none;
-      }
-      .btn-next:hover:not(:disabled) {
-        filter: brightness(1.1);
-        transform: translateY(-1px);
-      }
-      .btn-next:disabled,
-      .btn-back:disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
-        transform: none;
-      }
-      .btn-reset {
-        background: transparent;
-        color: var(--warn);
-        border-color: var(--warn);
-        flex: 0 0 auto;
-      }
-      .btn-reset:hover {
-        background: rgba(247, 201, 79, 0.1);
-      }
-
-      /* ——— SCORE PANEL ——— */
-      #score-panel {
-        display: none;
-        animation: slideUp 0.4s ease;
-      }
-      .score-card {
-        background: var(--surface);
-        border: 1px solid var(--border);
-        border-radius: 12px;
-        padding: 40px 28px 32px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-      }
-      .score-card::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 3px;
-        background: linear-gradient(90deg, var(--success), var(--accent));
-      }
-      .score-big {
-        font-family: var(--font-mono);
-        font-size: clamp(3.5rem, 12vw, 6rem);
-        font-weight: 700;
-        background: linear-gradient(135deg, var(--accent), var(--success));
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        line-height: 1;
-      }
-      .score-label {
-        color: var(--muted);
-        font-size: 0.85rem;
-        margin-top: 6px;
-        font-family: var(--font-mono);
-      }
-      .score-grade {
-        margin: 20px auto;
-        display: inline-block;
-        font-family: var(--font-mono);
-        font-size: 1.1rem;
-        font-weight: 700;
-        padding: 8px 24px;
-        border-radius: 6px;
-      }
-      .grade-s {
-        background: rgba(45, 212, 160, 0.15);
-        color: var(--success);
-        border: 1px solid rgba(45, 212, 160, 0.3);
-      }
-      .grade-a {
-        background: rgba(79, 142, 247, 0.15);
-        color: var(--accent);
-        border: 1px solid rgba(79, 142, 247, 0.3);
-      }
-      .grade-b {
-        background: rgba(124, 94, 247, 0.15);
-        color: var(--accent2);
-        border: 1px solid rgba(124, 94, 247, 0.3);
-      }
-      .grade-c {
-        background: rgba(247, 201, 79, 0.15);
-        color: var(--warn);
-        border: 1px solid rgba(247, 201, 79, 0.3);
-      }
-      .grade-f {
-        background: rgba(247, 106, 106, 0.15);
-        color: var(--danger);
-        border: 1px solid rgba(247, 106, 106, 0.3);
-      }
-
-      /* ——— REVIEW ——— */
-      #review-section {
-        display: none;
-      }
-      .review-toggle {
-        width: 100%;
-        background: var(--surface2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        padding: 13px 18px;
-        color: var(--accent);
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        cursor: pointer;
-        margin-top: 16px;
-        transition: all 0.15s;
-      }
-      .review-toggle:hover {
-        border-color: var(--accent);
-      }
-
-      .review-item {
-        background: var(--surface);
-        border: 1px solid var(--border);
+        font-family: var(--font-head);
+        font-weight: 600;
+        font-size: 0.88rem;
+        padding: 0.65rem 1.3rem;
         border-radius: 10px;
-        padding: 18px 20px;
-        margin-top: 12px;
-        border-left: 3px solid var(--border);
-      }
-      .review-item.correct {
-        border-left-color: var(--success);
-      }
-      .review-item.wrong {
-        border-left-color: var(--danger);
-      }
-
-      .review-q {
-        font-size: 0.9rem;
-        margin-bottom: 10px;
-        line-height: 1.5;
-      }
-      .review-answers {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-      }
-      .review-ans-row {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        font-size: 0.82rem;
-        padding: 7px 10px;
-        border-radius: 6px;
-      }
-      .review-ans-row .dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        flex-shrink: 0;
-      }
-      .review-ans-row.r-correct {
-        background: rgba(45, 212, 160, 0.08);
-        color: var(--success);
-      }
-      .review-ans-row.r-correct .dot {
-        background: var(--success);
-      }
-      .review-ans-row.r-wrong {
-        background: rgba(247, 106, 106, 0.08);
-        color: var(--danger);
-      }
-      .review-ans-row.r-wrong .dot {
-        background: var(--danger);
-      }
-      .review-ans-row.r-neutral {
-        color: var(--muted);
-      }
-      .review-ans-row.r-neutral .dot {
-        background: var(--muted);
-      }
-      .review-chapter {
-        font-family: var(--font-mono);
-        font-size: 0.65rem;
-        color: var(--muted);
-        margin-bottom: 6px;
-        text-transform: uppercase;
-      }
-
-      /* stat bar */
-      .stat-bars {
-        display: flex;
-        gap: 6px;
-        margin: 28px 0 20px;
-      }
-      .stat-bar {
-        flex: 1;
-        text-align: center;
-      }
-      .stat-bar-fill-wrap {
-        height: 4px;
-        background: var(--border);
-        border-radius: 2px;
-        margin-bottom: 6px;
-        overflow: hidden;
-      }
-      .stat-bar-fill {
-        height: 100%;
-        border-radius: 2px;
-        background: var(--accent);
-      }
-      .stat-bar-label {
-        font-family: var(--font-mono);
-        font-size: 0.65rem;
-        color: var(--muted);
-        text-transform: uppercase;
-      }
-      .stat-bar-val {
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
-        color: var(--text);
-      }
-
-      .btn-restart {
-        margin-top: 20px;
-        padding: 13px 32px;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
         border: none;
-        border-radius: 8px;
-        color: #fff;
-        font-family: var(--font-mono);
-        font-size: 0.8rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
         cursor: pointer;
         transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
       }
-      .btn-restart:hover {
+      .btn-back {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+      .btn-back:hover {
+        color: var(--text);
+        border-color: var(--accent);
+      }
+      .btn-next {
+        background: linear-gradient(135deg, var(--accent), #3b6fd4);
+        color: #fff;
+        margin-left: auto;
+      }
+      .btn-next:hover {
         filter: brightness(1.1);
-        transform: translateY(-2px);
+      }
+      .btn-next:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        filter: none;
+      }
+      .btn-reset {
+        background: rgba(248, 113, 113, 0.12);
+        border: 1px solid rgba(248, 113, 113, 0.3);
+        color: var(--danger);
+      }
+      .btn-reset:hover {
+        background: rgba(248, 113, 113, 0.2);
+      }
+      .btn-finish {
+        background: linear-gradient(135deg, var(--success), #059669);
+        color: #0d0f1a;
+        margin-left: auto;
+        font-weight: 700;
+      }
+      .btn-finish:hover {
+        filter: brightness(1.1);
       }
 
-      @media (max-width: 480px) {
-        .question-card {
-          padding: 20px 16px 18px;
+      /* ── RESULT SCREEN ── */
+      .result-hero {
+        text-align: center;
+        padding: 2.5rem 1rem 2rem;
+      }
+      .score-ring {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: conic-gradient(var(--accent) var(--pct), var(--border) 0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        position: relative;
+      }
+      .score-ring::before {
+        content: "";
+        position: absolute;
+        inset: 12px;
+        background: var(--card);
+        border-radius: 50%;
+      }
+      .score-ring-text {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+      }
+      .score-ring-text .big {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--accent);
+        display: block;
+      }
+      .score-ring-text .sm {
+        font-size: 0.7rem;
+        color: var(--muted);
+        font-family: var(--font-mono);
+      }
+      .result-grade {
+        font-size: 1.2rem;
+        font-weight: 800;
+        margin-bottom: 0.3rem;
+      }
+      .result-msg {
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      .stat-strip {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+      .stat-box {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+      }
+      .stat-box .sv {
+        font-size: 1.5rem;
+        font-weight: 800;
+      }
+      .stat-box .sl {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 0.2rem;
+        font-family: var(--font-mono);
+      }
+      .sv.correct {
+        color: var(--success);
+      }
+      .sv.wrong {
+        color: var(--danger);
+      }
+      .sv.skipped {
+        color: var(--warning);
+      }
+
+      /* ── REVIEW TABLE ── */
+      .review-section {
+        padding: 0 0 3rem;
+      }
+      .review-section h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .review-item {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.25rem;
+        margin-bottom: 0.75rem;
+        border-left: 4px solid transparent;
+        transition: border-color 0.2s;
+      }
+      .review-item.ri-correct {
+        border-left-color: var(--success);
+      }
+      .review-item.ri-wrong {
+        border-left-color: var(--danger);
+      }
+      .review-item.ri-skip {
+        border-left-color: var(--warning);
+      }
+      .ri-top {
+        display: flex;
+        gap: 0.75rem;
+        align-items: flex-start;
+        margin-bottom: 0.75rem;
+      }
+      .ri-num {
+        font-family: var(--font-mono);
+        font-size: 0.7rem;
+        color: var(--muted);
+        min-width: 28px;
+        padding-top: 0.1rem;
+      }
+      .ri-q {
+        font-size: 0.88rem;
+        font-weight: 600;
+        line-height: 1.5;
+        flex: 1;
+      }
+      .ri-badge {
+        font-size: 0.68rem;
+        font-family: var(--font-mono);
+        padding: 0.2rem 0.5rem;
+        border-radius: 6px;
+        white-space: nowrap;
+        margin-top: 0.05rem;
+      }
+      .ri-badge.correct {
+        background: rgba(52, 211, 153, 0.15);
+        color: var(--success);
+      }
+      .ri-badge.wrong {
+        background: rgba(248, 113, 113, 0.15);
+        color: var(--danger);
+      }
+      .ri-badge.skip {
+        background: rgba(251, 191, 36, 0.15);
+        color: var(--warning);
+      }
+      .ri-answers {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+      }
+      .ri-ans-box {
+        background: var(--surface);
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+      }
+      .ri-ans-box .lbl {
+        font-size: 0.65rem;
+        color: var(--muted);
+        font-family: var(--font-mono);
+        margin-bottom: 0.15rem;
+      }
+      .ri-ans-box.your-ans.wrong {
+        background: rgba(248, 113, 113, 0.1);
+        border: 1px solid rgba(248, 113, 113, 0.25);
+      }
+      .ri-ans-box.correct-ans {
+        background: rgba(52, 211, 153, 0.1);
+        border: 1px solid rgba(52, 211, 153, 0.25);
+      }
+
+      /* ── TOAST ── */
+      #toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(80px);
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 0.8rem 1.5rem;
+        font-size: 0.88rem;
+        color: var(--muted);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        transition: transform 0.3s ease;
+        z-index: 999;
+        white-space: nowrap;
+      }
+      #toast.show {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      /* ── UTILS ── */
+      .container {
+        max-width: 760px;
+      }
+      @media (max-width: 576px) {
+        .q-card {
+          padding: 1.4rem;
         }
-        .q-text {
-          font-size: 0.96rem;
+        .stat-strip {
+          grid-template-columns: 1fr 1fr 1fr;
+          gap: 0.5rem;
+        }
+        .ri-answers {
+          grid-template-columns: 1fr;
         }
       }
     </style>
   </head>
   <body>
-    <div class="quiz-wrapper">
-      <div class="quiz-header">
-        <div class="tag">Information Security</div>
-        <h1>Chapters 9–12 Quiz</h1>
-        <p>Physical Security · Implementation · Personnel · Maintenance</p>
-      </div>
-
-      <!-- Quiz Panel -->
-      <div id="quiz-panel">
-        <div class="progress-bar-wrap">
-          <div
-            class="progress-bar-fill"
-            id="progress-fill"
-            style="width: 0%"
-          ></div>
-        </div>
-        <div class="progress-meta">
-          <span id="progress-text">Question 1 of 80</span>
-          <span id="score-live">Score: 0</span>
-        </div>
-
-        <div class="question-card" id="question-card">
-          <div class="q-chapter-badge" id="q-chapter">Chapter 9</div>
-          <div class="q-number" id="q-number">Q1</div>
-          <div class="q-text" id="q-text"></div>
-          <ul class="choices-list" id="choices-list"></ul>
-          <div class="feedback-msg" id="feedback-msg"></div>
-        </div>
-
-        <div class="nav-row">
-          <button class="btn-nav btn-back" id="btn-back" onclick="goBack()">
-            ← Back
-          </button>
-          <button class="btn-nav btn-next" id="btn-next" onclick="goNext()">
-            Next →
-          </button>
-          <button class="btn-nav btn-reset" onclick="confirmReset()">
-            ↺ Reset
-          </button>
-        </div>
-      </div>
-
-      <!-- Score Panel -->
-      <div id="score-panel">
-        <div class="score-card">
-          <div class="score-big" id="score-final">0/80</div>
-          <div class="score-label">Final Score</div>
-          <div class="score-grade" id="score-grade-badge"></div>
-          <div
-            id="score-message"
-            style="color: var(--muted); font-size: 0.88rem; margin-top: 6px"
-          ></div>
-          <div class="stat-bars">
-            <div class="stat-bar">
-              <div class="stat-bar-fill-wrap">
-                <div
-                  class="stat-bar-fill"
-                  id="bar-correct"
-                  style="background: var(--success)"
-                ></div>
-              </div>
-              <div class="stat-bar-val" id="bar-correct-val">0</div>
-              <div class="stat-bar-label">Correct</div>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-fill-wrap">
-                <div
-                  class="stat-bar-fill"
-                  id="bar-wrong"
-                  style="background: var(--danger)"
-                ></div>
-              </div>
-              <div class="stat-bar-val" id="bar-wrong-val">0</div>
-              <div class="stat-bar-label">Wrong</div>
-            </div>
-            <div class="stat-bar">
-              <div class="stat-bar-fill-wrap">
-                <div
-                  class="stat-bar-fill"
-                  id="bar-pct"
-                  style="background: var(--accent2)"
-                ></div>
-              </div>
-              <div class="stat-bar-val" id="bar-pct-val">0%</div>
-              <div class="stat-bar-label">Accuracy</div>
+    <div class="page-wrap">
+      <!-- HEADER -->
+      <header class="quiz-header">
+        <div class="container mx-auto px-3">
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <h1>
+              <i
+                class="fa-solid fa-shield-halved me-2"
+                style="font-size: 1.2rem"
+              ></i
+              >InfoSec Quiz
+            </h1>
+            <div class="d-flex gap-2 flex-wrap">
+              <span class="badge-chip">Ch.5 Risk Mgmt</span>
+              <span class="badge-chip">Ch.6 Firewalls & VPNs</span>
+              <span class="badge-chip">Ch.7 IDPS</span>
+              <span class="badge-chip">Ch.8 Cryptography</span>
             </div>
           </div>
-          <button class="btn-restart" onclick="resetQuiz()">↺ Try Again</button>
         </div>
+      </header>
 
-        <button
-          class="review-toggle"
-          onclick="toggleReview()"
-          id="review-toggle-btn"
-        >
-          ▼ Show Answer Review
-        </button>
-        <div id="review-section"></div>
+      <!-- PROGRESS BAR (hidden on start/result) -->
+      <div class="progress-wrap" id="progress-wrap" style="display: none">
+        <div class="container mx-auto px-3">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="q-counter" id="q-counter">Question 1 of 80</span>
+            <span class="score-badge" id="score-live">Score: 0</span>
+          </div>
+          <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="pb-fill" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- START SCREEN -->
+      <div id="start-screen" class="active">
+        <div class="container mx-auto px-3">
+          <div class="start-card">
+            <div class="start-icon">🔐</div>
+            <h2>Security Quiz</h2>
+            <p>
+              Test your knowledge across four information security chapters —
+              risk management, firewalls, intrusion detection, and cryptography.
+            </p>
+            <div class="info-grid mt-3">
+              <div class="info-item">
+                <div class="val">80</div>
+                <div class="lbl">Questions</div>
+              </div>
+              <div class="info-item">
+                <div class="val">MCQ</div>
+                <div class="lbl">Format</div>
+              </div>
+              <div class="info-item">
+                <div class="val">4</div>
+                <div class="lbl">Chapters</div>
+              </div>
+              <div class="info-item">
+                <div class="val">∞</div>
+                <div class="lbl">Attempts</div>
+              </div>
+            </div>
+            <p
+              class="text-center"
+              style="
+                font-size: 0.82rem;
+                color: var(--muted);
+                margin-bottom: 1.5rem;
+              "
+            >
+              Questions are shuffled each session. You can go back but cannot
+              change answers.
+            </p>
+            <button
+              class="btn-nav btn-finish w-100 justify-content-center"
+              style="border-radius: 12px; padding: 0.9rem"
+              onclick="startQuiz()"
+            >
+              <i class="fa-solid fa-play me-2"></i>Start Quiz
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- QUIZ SCREEN -->
+      <div id="quiz-screen">
+        <div class="container mx-auto px-3 py-4">
+          <div class="q-card" id="q-card">
+            <span class="chapter-tag" id="q-chapter"></span>
+            <div class="q-text" id="q-text"></div>
+            <div class="choices" id="choices"></div>
+            <div class="nav-wrap">
+              <button class="btn-nav btn-reset" onclick="confirmReset()">
+                <i class="fa-solid fa-rotate-left"></i> Reset
+              </button>
+              <button class="btn-nav btn-back" id="btn-back" onclick="goBack()">
+                <i class="fa-solid fa-arrow-left"></i> Back
+              </button>
+              <button
+                class="btn-nav btn-next"
+                id="btn-next"
+                onclick="goNext()"
+                disabled
+              >
+                <i class="fa-solid fa-arrow-right"></i> Next
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULT SCREEN -->
+      <div id="result-screen">
+        <div class="container mx-auto px-3">
+          <div class="result-hero">
+            <div class="score-ring" id="score-ring">
+              <div class="score-ring-text">
+                <span class="big" id="score-pct">--</span>
+                <span class="sm">SCORE</span>
+              </div>
+            </div>
+            <div class="result-grade" id="result-grade"></div>
+            <div class="result-msg" id="result-msg"></div>
+            <div class="stat-strip mt-3">
+              <div class="stat-box">
+                <div class="sv correct" id="r-correct">0</div>
+                <div class="sl">Correct</div>
+              </div>
+              <div class="stat-box">
+                <div class="sv wrong" id="r-wrong">0</div>
+                <div class="sl">Wrong</div>
+              </div>
+              <div class="stat-box">
+                <div class="sv skipped" id="r-skip">0</div>
+                <div class="sl">Skipped</div>
+              </div>
+            </div>
+            <button
+              class="btn-nav btn-finish mx-auto mt-2"
+              style="border-radius: 12px; padding: 0.75rem 2rem"
+              onclick="confirmReset()"
+            >
+              <i class="fa-solid fa-rotate-left me-2"></i>Retake Quiz
+            </button>
+          </div>
+
+          <div class="review-section">
+            <h3>Answer Review</h3>
+            <div id="review-list"></div>
+          </div>
+        </div>
       </div>
     </div>
+    <!-- /page-wrap -->
+
+    <div id="toast"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-      // ============================================================
-      //  QUESTION BANK — 80 questions (Chapters 9–12)
-      // ============================================================
+      // ═══════════════════════════════════════════════
+      //  QUESTION BANK  (80 questions)
+      // ═══════════════════════════════════════════════
       const ALL_QUESTIONS = [
-        // ---- CHAPTER 9: Physical Security (20 questions) ----
-        // Terminology
+        // ── CHAPTER 5 — RISK MANAGEMENT (20 questions) ──
+
+        // Terminology questions
         {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "A physical location engineered with controls to minimize risk from physical threats, often using natural terrain, surrounding development, and protection mechanisms.",
-          a: 1,
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "The process of identifying, assessing, and reducing risks facing an organization.",
           choices: [
-            "Mantrap",
-            "Secure Facility",
-            "Wiring Closet",
-            "TEMPEST Facility",
+            "Risk Control",
+            "Risk Appetite",
+            "Risk Management",
+            "Risk Transfer",
           ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "A small enclosure with a separate entry and exit point that requires identity verification before allowing passage into a facility.",
-          a: 2,
-          choices: ["Airlock", "Vestibule", "Mantrap", "Biometric Gateway"],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "A lock configuration that defaults to allowing passage (unlocked) when it loses power, prioritizing life safety over security.",
-          a: 0,
-          choices: [
-            "Fail-Safe Lock",
-            "Fail-Secure Lock",
-            "Biometric Lock",
-            "Manual Lock",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "A lock configuration that defaults to denying passage (locked) when it loses power, prioritizing security over convenience.",
-          a: 1,
-          choices: [
-            "Fail-Safe Lock",
-            "Fail-Secure Lock",
-            "Electronic Lock",
-            "Programmable Lock",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "The security vulnerability that occurs when an authorized individual opens a secured door and unauthorized persons also pass through.",
-          a: 3,
-          choices: [
-            "Shoulder Surfing",
-            "Social Engineering",
-            "Piggybacking",
-            "Tailgating",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "A television surveillance system where signals are transmitted to a limited set of monitors rather than broadcast openly.",
-          a: 2,
-          choices: ["TEMPEST", "CCTV", "EMR", "DVR System"],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "The U.S. government program developed to reduce the risk of monitoring information systems through their electromagnetic radiation emissions.",
-          a: 0,
-          choices: ["TEMPEST", "CCTV", "HVAC", "UPS"],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "A backup power device that provides emergency electricity to critical computing systems during a power outage.",
-          a: 3,
-          choices: [
-            "Generator",
-            "GFCI",
-            "Surge Protector",
-            "Uninterruptible Power Supply (UPS)",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "A device capable of quickly identifying and interrupting a ground fault to prevent electrical shock or fire hazard.",
-          a: 1,
-          choices: [
-            "Circuit Breaker",
-            "GFCI",
-            "Surge Protector",
-            "Voltage Regulator",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "The method of data interception that captures information from the electromagnetic signals emitted by computing equipment without physical connection.",
-          a: 2,
-          choices: [
-            "Direct Observation",
-            "Packet Sniffing",
-            "Electromagnetic Interception",
-            "Traffic Analysis",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "The use of social skills to manipulate employees into revealing confidential information they should not disclose.",
-          a: 0,
-          choices: [
-            "Social Engineering",
-            "Phishing",
-            "Pretexting",
-            "Tailgating",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "terminology",
-          q: "Off-site computing that uses the Internet, dial-up, or leased point-to-point links to connect to an organization's network.",
-          a: 3,
-          choices: [
-            "Remote Desktop",
-            "VPN Tunneling",
-            "Site-to-Site Networking",
-            "Telecommuting",
-          ],
-        },
-        // Fundamentals
-        {
-          ch: "Chapter 9",
-          type: "fundamental",
-          q: "Which of the following is NOT one of the seven major sources of physical loss identified in Chapter 9?",
-          a: 2,
-          choices: [
-            "Extreme temperature",
-            "Liquids",
-            "Logical access breaches",
-            "Projectiles",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "fundamental",
-          q: "Which organizational role is primarily responsible for performing risk assessments and implementation reviews for physical security?",
-          a: 1,
-          choices: [
-            "General Management",
-            "Information Security Management",
-            "IT Management",
-            "Custodial Staff",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "fundamental",
-          q: "Why are custodial staff considered a special security concern in computing environments?",
-          a: 3,
-          choices: [
-            "They require elevated network access",
-            "They are untrained technically",
-            "They are contractors",
-            "They have the greatest degree of unsupervised access",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "fundamental",
-          q: "What is the primary drawback of electronic monitoring (cameras) as a security control?",
-          a: 0,
-          choices: [
-            "It is passive and does not prevent access or prohibited activity",
-            "It is too expensive to deploy widely",
-            "It cannot be integrated with alarm systems",
-            "It requires constant maintenance",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "fundamental",
-          q: "Which UPS configuration provides the highest level of power protection by continuously running the load through the inverter?",
-          a: 2,
-          choices: [
-            "Standby",
-            "Line-interactive",
-            "Double Conversion Online",
-            "Standby Ferroresonant",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "fundamental",
-          q: "What security measure can be installed in large ventilation shafts to compartmentalize access by potential intruders?",
-          a: 1,
-          choices: [
-            "Motion detectors",
-            "Wire mesh grids",
-            "Camera arrays",
-            "Pressure sensors",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "fundamental",
-          q: "Why should ID cards and badges NOT be the sole physical access control mechanism?",
-          a: 3,
-          choices: [
-            "They are too expensive",
-            "Biometrics is always better",
-            "Guards are more reliable",
-            "Cards can be easily duplicated, stolen, and modified",
-          ],
-        },
-        {
-          ch: "Chapter 9",
-          type: "fundamental",
-          q: "Which software solution helps track and recover lost or stolen laptops by reporting device location to a central monitoring center?",
-          a: 0,
-          choices: ["CompuTrace", "BitLocker", "RemoteWipe", "LaptopGuard"],
+          correct: 2,
         },
 
-        // ---- CHAPTER 10: Implementing Information Security (20 questions) ----
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "The enumeration and documentation of risks to an organization's information assets.",
+          choices: [
+            "Risk Appetite",
+            "Risk Identification",
+            "Risk Assessment",
+            "Residual Risk",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "Risk that has not been completely removed, shifted, or planned for after controls are applied.",
+          choices: [
+            "Inherent Risk",
+            "Transfer Risk",
+            "Residual Risk",
+            "Accepted Risk",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "The quantity and nature of risk that organizations are willing to accept as trade-offs between perfect security and unlimited accessibility.",
+          choices: [
+            "Residual Risk",
+            "Risk Appetite",
+            "Risk Tolerance Limit",
+            "Control Threshold",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "A formula combining asset value and percentage lost during an attack: Asset Value × Exposure Factor.",
+          choices: [
+            "Annualized Rate of Occurrence",
+            "Cost-Benefit Analysis",
+            "Single Loss Expectancy",
+            "Annualized Loss Expectancy",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "The expected monetary loss for an asset due to a risk over a one-year period: SLE × ARO.",
+          choices: [
+            "Single Loss Expectancy",
+            "Annualized Loss Expectancy",
+            "Exposure Factor",
+            "Cost-Benefit Analysis",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "A risk control strategy that attempts to prevent exploitation of the vulnerability — the preferred approach.",
+          choices: ["Mitigation", "Transfer", "Acceptance", "Defense"],
+          correct: 3,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "A risk control strategy that attempts to shift risk to other assets, processes, or organizations.",
+          choices: ["Defense", "Termination", "Transfer", "Mitigation"],
+          correct: 2,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "A plan that defines the actions to take while a security incident is in progress.",
+          choices: [
+            "Business Continuity Plan",
+            "Disaster Recovery Plan",
+            "Incident Response Plan",
+            "Risk Mitigation Plan",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "A plan that encompasses the continuation of business activities if a catastrophic event occurs.",
+          choices: [
+            "Incident Response Plan",
+            "Disaster Recovery Plan",
+            "Business Continuity Plan",
+            "Residual Risk Plan",
+          ],
+          correct: 2,
+        },
+
+        // Fundamentals
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "Which formula is used to calculate the Cost-Benefit Analysis (CBA) of a security control?",
+          choices: [
+            "ALE(prior) – ALE(post) – ACS",
+            "SLE × ARO",
+            "Asset Value × Exposure Factor",
+            "ALE + ACS – SLE",
+          ],
+          correct: 0,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "What are the five risk control strategies?",
+          choices: [
+            "Identify, Assess, Transfer, Monitor, Accept",
+            "Defense, Transfer, Mitigation, Acceptance, Termination",
+            "Prevent, Detect, Respond, Recover, Learn",
+            "Frame, Assess, Respond, Monitor, Terminate",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "What does a Threats-Vulnerabilities-Assets (TVA) worksheet combine?",
+          choices: [
+            "A list of assets with security budgets",
+            "A weighted list of threats combined with asset vulnerabilities",
+            "A list of accepted risks and their costs",
+            "A benchmarking report of best practices",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "In the NIST Risk Management Framework, what are the four core activities?",
+          choices: [
+            "Plan, Do, Check, Act",
+            "Frame, Assess, Respond, Monitor",
+            "Identify, Protect, Detect, Respond",
+            "Classify, Control, Monitor, Report",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "Which type of assessment uses nonnumerical, scale-based measures rather than exact dollar values?",
+          choices: [
+            "Quantitative Assessment",
+            "FAIR Assessment",
+            "Qualitative Assessment",
+            "Benchmarking Assessment",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "The process of seeking out and studying practices used in other organizations that one's own organization wishes to duplicate is called:",
+          choices: [
+            "Baselining",
+            "Benchmarking",
+            "Best Practice Adoption",
+            "Due Diligence",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "Which asset category includes applications, operating systems, or security components?",
+          choices: ["Hardware", "People", "Software", "Data"],
+          correct: 2,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "A 'clean desk policy' and 'dumpster diving' awareness relate to which aspect of risk management?",
+          choices: [
+            "Hardware Asset Identification",
+            "Data Classification and Management",
+            "Network Asset Inventory",
+            "Software Categorization",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "The Annualized Rate of Occurrence (ARO) for an event that occurs once every five years is:",
+          choices: ["0.05", "0.5", "0.2", "5.0"],
+          correct: 2,
+        },
+
+        {
+          ch: "ch5",
+          chapter: "Ch.5 · Risk Management",
+          q: "The FAIR approach to risk assessment stands for:",
+          choices: [
+            "Framework for Assessing Information Risk",
+            "Factor Analysis of Information Risk",
+            "Federal Analysis and Information Review",
+            "Functional Assessment of Integrated Risk",
+          ],
+          correct: 1,
+        },
+
+        // ── CHAPTER 6 — ACCESS CONTROLS, FIREWALLS, VPNs (20 questions) ──
+
         // Terminology
         {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "A project management tool that breaks a project into major tasks with work to be accomplished, assignees, dates, effort, expenses, and dependencies.",
-          a: 2,
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "A method by which systems determine whether and how to admit a user into a trusted area of the organization.",
           choices: [
-            "Gantt Chart",
-            "Critical Path Method",
-            "Work Breakdown Structure (WBS)",
-            "Project Charter",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "A conversion strategy in which the old system is completely stopped and the new system immediately takes over on a specific date.",
-          a: 0,
-          choices: [
-            "Direct Changeover",
-            "Phased Implementation",
-            "Pilot Implementation",
-            "Parallel Operations",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "A conversion strategy where a selected subset of the organization uses the new system before full deployment.",
-          a: 2,
-          choices: [
-            "Direct Changeover",
-            "Phased Implementation",
-            "Pilot Implementation",
-            "Parallel Operations",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "A conversion strategy in which both the old and new systems run simultaneously until the new system is validated.",
-          a: 3,
-          choices: [
-            "Direct Changeover",
-            "Phased Implementation",
-            "Pilot Implementation",
-            "Parallel Operations",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "A proven prioritization method that addresses change from general (policies) to specific (applications) in a four-layer framework.",
-          a: 1,
-          choices: [
-            "SDLC Model",
-            "Bull's-Eye Model",
-            "Lewin Change Model",
-            "NIST Framework",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "The formal authorization that an IT system has been approved to process, store, or transmit information and meets adequate quality requirements.",
-          a: 3,
-          choices: [
-            "Certification",
-            "Verification",
-            "Validation",
-            "Accreditation",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "The evaluation of the technical and nontechnical security controls of an IT system to establish the extent to which its design meets security requirements.",
-          a: 0,
-          choices: [
-            "Certification",
-            "Accreditation",
+            "Authentication",
             "Authorization",
-            "Validation",
+            "Access Control",
+            "Identification",
           ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "A change management model with three stages: Unfreezing, Moving, and Refreezing.",
-          a: 2,
-          choices: [
-            "SDLC Model",
-            "Agile Model",
-            "Lewin Change Model",
-            "Bull's-Eye Model",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "The description of a project's features, capabilities, functions, and quality level used as the basis of a project plan.",
-          a: 1,
-          choices: ["Project Charter", "Project Scope", "WBS", "Baseline"],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "The process that manages how frequently technical systems are updated and how updates are approved and funded.",
-          a: 3,
-          choices: [
-            "Change Control",
-            "Technology Governance",
-            "Configuration Management",
-            "IT Governance",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "A development collaboration method where affected members of an organization are involved with project planners early to reduce resistance to change.",
-          a: 0,
-          choices: [
-            "Joint Application Development",
-            "Agile Sprinting",
-            "Paired Programming",
-            "Stakeholder Analysis",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "terminology",
-          q: "The national security system C&A process that establishes minimum national standards for certifying and accrediting national security systems.",
-          a: 2,
-          choices: ["FISMA", "ISO 27001", "NIACAP", "COBIT"],
-        },
-        // Fundamentals
-        {
-          ch: "Chapter 10",
-          type: "fundamental",
-          q: "In the SecSDLC implementation phase, which of the following does NOT represent a type of change made to information systems?",
-          a: 1,
-          choices: [
-            "Procedures through policy",
-            "Market strategy through advertising",
-            "Hardware through firewalls",
-            "Software through encryption",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "fundamental",
-          q: "Which of the following is the best person to lead an information security project implementation according to Chapter 10?",
-          a: 3,
-          choices: [
-            "General management champion",
-            "CIO",
-            "Senior IT manager",
-            "Suitable person from the information security community of interest",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "fundamental",
-          q: "A negative feedback loop in project execution is used to:",
-          a: 0,
-          choices: [
-            "Measure project progress and take corrective action when deviation occurs",
-            "Report project failures to executives",
-            "Terminate underperforming employees",
-            "Revert to previous system configurations",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "fundamental",
-          q: "Which three parameters can a project manager typically adjust when correcting a deviating task?",
-          a: 2,
-          choices: [
-            "Staff, equipment, and time",
-            "Budget, quality, and risk",
-            "Effort/money, elapsed time, and quality/quantity of deliverable",
-            "Scope, personnel, and policy",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "fundamental",
-          q: "NIST SP 800-39 builds on a three-tiered approach. Which tier addresses risk from the information system perspective?",
-          a: 3,
-          choices: ["Tier 1", "Tier 2", "Tier 4", "Tier 3"],
-        },
-        {
-          ch: "Chapter 10",
-          type: "fundamental",
-          q: "What is the primary benefit of implementing large information security projects in smaller stages?",
-          a: 1,
-          choices: [
-            "It reduces documentation requirements",
-            "It provides more flexibility and reduces uncertainty",
-            "It eliminates the need for a project manager",
-            "It allows bypassing the change control process",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "fundamental",
-          q: "Which organization offers the GIAC Certified Project Manager certification focused on security professionals?",
-          a: 0,
-          choices: [
-            "SANS Institute",
-            "EC Council",
-            "Security Industry Association",
-            "(ISC)2",
-          ],
-        },
-        {
-          ch: "Chapter 10",
-          type: "fundamental",
-          q: "ISO 27001/27002 systems certification was originally created to provide a foundation for which country's certification of ISMSs?",
-          a: 2,
-          choices: ["United States", "Germany", "United Kingdom", "Japan"],
+          correct: 2,
         },
 
-        // ---- CHAPTER 11: Security and Personnel (20 questions) ----
-        // Terminology
         {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "The top information security officer in an organization, who manages the overall information security program and frequently reports to the CIO.",
-          a: 0,
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "A mechanism whereby unverified entities seeking access to a resource provide a label by which they are known to the system.",
           choices: [
-            "Chief Information Security Officer (CISO)",
-            "Chief Security Officer (CSO)",
-            "Security Manager",
-            "Security Technician",
+            "Authentication",
+            "Identification",
+            "Authorization",
+            "Accountability",
           ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "The officer accountable for the day-to-day operation of an information security program who accomplishes objectives set by the CISO.",
-          a: 3,
-          choices: ["CISO", "CSO", "Security Technician", "Security Manager"],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "A technically qualified employee tasked to configure security hardware and software and who tends to be specialized in specific technologies.",
-          a: 1,
-          choices: [
-            "Security Manager",
-            "Security Technician",
-            "Security Analyst",
-            "CISO",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "An internal control strategy that requires at least two people to complete a significant task, reducing the chance of policy violation.",
-          a: 2,
-          choices: [
-            "Least Privilege",
-            "Job Rotation",
-            "Separation of Duties",
-            "Need to Know",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "A control strategy where two individuals review and approve each other's work before a task is categorized as complete.",
-          a: 0,
-          choices: [
-            "Two-Man Control",
-            "Dual Authorization",
-            "Separation of Duties",
-            "Cross-training",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "A practice where employees know each other's job skills and can audit each other's actions, ensuring no single employee goes unchecked.",
-          a: 3,
-          choices: [
-            "Cross-Certification",
-            "Dual Control",
-            "Two-Man Rule",
-            "Job Rotation",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "A policy that restricts the flow of proprietary information when an employee leaves to join a competitor by requiring them to stay away from the workplace during their notice period.",
-          a: 1,
-          choices: [
-            "Non-Compete Clause",
-            "Garden Leave",
-            "Separation Agreement",
-            "Restrictive Covenant",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "An access control principle that ensures only employees with a real business need are allowed to access systems and information.",
-          a: 2,
-          choices: [
-            "Job Rotation",
-            "Two-Man Control",
-            "Least Privilege",
-            "Need to Know",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "The (ISC)² certification widely recognized as the gold standard for information security professionals.",
-          a: 0,
-          choices: ["CISSP", "CISM", "CISA", "Security+"],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "An ISACA certification that verifies an individual's ability to manage, design, and assess an enterprise's information security.",
-          a: 1,
-          choices: ["CISSP", "CISM", "CISA", "CRISC"],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "An ISACA certification that focuses on audit, control, and security of information systems.",
-          a: 2,
-          choices: ["CISM", "CRISC", "CISA", "CGEIT"],
-        },
-        {
-          ch: "Chapter 11",
-          type: "terminology",
-          q: "The employment practice of investigating a candidate's past, including identity, education, employment history, and credit, before extending an offer.",
-          a: 3,
-          choices: [
-            "Reference Check",
-            "Credential Review",
-            "New Hire Screening",
-            "Background Check",
-          ],
-        },
-        // Fundamentals
-        {
-          ch: "Chapter 11",
-          type: "fundamental",
-          q: "Which of the following is NOT a common placement location for the information security function within an organization?",
-          a: 2,
-          choices: [
-            "IT function",
-            "Physical security function",
-            "Marketing department",
-            "Legal department",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "fundamental",
-          q: "What is a key reason organizations should avoid revealing access privileges when advertising open security positions?",
-          a: 0,
-          choices: [
-            "It could attract attackers who exploit those specific privileges",
-            "It violates equal opportunity laws",
-            "It inflates salary expectations",
-            "It is a regulatory requirement",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "fundamental",
-          q: "Which type of employee termination requires that logical and keycard access be terminated BEFORE the employee is informed?",
-          a: 3,
-          choices: [
-            "Friendly departure",
-            "Retirement",
-            "Promotion",
-            "Hostile departure",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "fundamental",
-          q: "What is the primary security concern with temporary employees compared to regular staff?",
-          a: 1,
-          choices: [
-            "They require higher-level access",
-            "They are often not subject to contractual obligations or general policies",
-            "They cannot be given ID badges",
-            "They must always be escorted by management",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "fundamental",
-          q: "In a secure facility, how should contract employees be managed during their time on-site?",
-          a: 2,
-          choices: [
-            "Given full access with a signed NDA",
-            "Restricted to a single room",
-            "Escorted from room to room and into/out of the facility",
-            "Supervised only in data center areas",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "fundamental",
-          q: "Which professional advice from Chapter 11 emphasizes that security work should be effective without drawing unnecessary attention?",
-          a: 0,
-          choices: [
-            "Be heard and not seen",
-            "Always remember: business before technology",
-            "Know more than you say",
-            "Your education is never complete",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "fundamental",
-          q: "What document requires employees to agree in writing to monitoring and nondisclosure as a condition of employment?",
-          a: 3,
-          choices: [
-            "Job Description",
-            "Background Check Form",
-            "New Hire Orientation Document",
-            "Employment Contract",
-          ],
-        },
-        {
-          ch: "Chapter 11",
-          type: "fundamental",
-          q: "What approach does Chapter 11 recommend for organizations to incorporate information security into performance evaluations?",
-          a: 1,
-          choices: [
-            "Annual cybersecurity testing only",
-            "Document security violations in performance evaluations",
-            "Verbal warnings with no formal documentation",
-            "Only evaluate technical security staff",
-          ],
+          correct: 1,
         },
 
-        // ---- CHAPTER 12: Information Security Maintenance (20 questions) ----
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "The process of validating a supplicant's purported identity.",
+          choices: [
+            "Identification",
+            "Authorization",
+            "Accountability",
+            "Authentication",
+          ],
+          correct: 3,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "The matching of an authenticated entity to a list of information assets and corresponding access levels.",
+          choices: [
+            "Identification",
+            "Authentication",
+            "Authorization",
+            "Accountability",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "Ensures that all actions on a system—authorized or unauthorized—can be attributed to an authenticated identity.",
+          choices: [
+            "Authorization",
+            "Identification",
+            "Accountability",
+            "Authentication",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "An approach based on measurable human characteristics/traits to authenticate identity, evaluated on false reject rate, false accept rate, and crossover error rate.",
+          choices: [
+            "Smart Cards",
+            "Biometrics",
+            "Passphrase Systems",
+            "Token Authentication",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "Access controls that use data classification schemes and are strictly enforced by a central authority.",
+          choices: [
+            "Discretionary Access Controls",
+            "Role-Based Access Controls",
+            "Mandatory Access Controls",
+            "Nondiscretionary Controls",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "Access controls that allow users to control and possibly provide access to information or resources at their disposal.",
+          choices: [
+            "Mandatory Access Controls",
+            "Nondiscretionary Controls",
+            "Discretionary Access Controls",
+            "Bell-LaPadula Controls",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "A private word or combination of characters that only the user should know.",
+          choices: ["Passphrase", "Token", "Smart Card", "Password"],
+          correct: 3,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "A series of characters, typically longer than a password, from which a virtual password is derived.",
+          choices: ["PIN", "Passphrase", "Token", "Smart Card"],
+          correct: 1,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "A centralized authentication system that validates user credentials for dial-up access using a central server — the R in its acronym stands for Remote.",
+          choices: ["TACACS", "Kerberos", "SESAME", "RADIUS"],
+          correct: 3,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "An authentication system that provides secure third-party authentication using symmetric key encryption and consists of an Authentication Server, KDC, and Ticket Granting Service.",
+          choices: ["RADIUS", "TACACS", "Kerberos", "SESAME"],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "A private and secure network connection between systems that uses the data communication capability of an unsecured and public network.",
+          choices: [
+            "RADIUS Tunnel",
+            "Secure Shell",
+            "Virtual Private Network",
+            "Content Filter",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "A VPN mode in which the entire client package is encrypted and added as the data portion of a packet from one tunneling server to another, revealing nothing about the true destination.",
+          choices: [
+            "Transport Mode",
+            "Circuit Mode",
+            "Tunnel Mode",
+            "Hybrid Mode",
+          ],
+          correct: 2,
+        },
+
+        // Fundamentals
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "Which firewall processing mode examines the header information of data packets and is the simplest type?",
+          choices: [
+            "Application Gateway",
+            "Circuit Gateway",
+            "Packet-Filtering Firewall",
+            "MAC Layer Firewall",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "A firewall type that keeps track of each network connection between internal and external systems using a state table is called:",
+          choices: [
+            "Dynamic Filtering",
+            "Static Filtering",
+            "Stateful Inspection",
+            "Circuit Gateway",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "An Application Layer Firewall is also known as a:",
+          choices: [
+            "Packet Filter",
+            "MAC Layer Firewall",
+            "Proxy Server",
+            "Circuit Gateway",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "Which access control architecture model is based on the principle of 'no write up, no read down'?",
+          choices: [
+            "Bell-LaPadula Model",
+            "Biba Integrity Model",
+            "Clark-Wilson Model",
+            "Brewer-Nash Model",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "The Brewer-Nash Model is also known as the:",
+          choices: [
+            "Bell-LaPadula Model",
+            "Biba Integrity Model",
+            "Chinese Wall Model",
+            "Graham-Denning Model",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch6",
+          chapter: "Ch.6 · Firewalls & VPNs",
+          q: "An automatic phone-dialing program that dials every number in a configured range and records numbers where a modem picks up is called a:",
+          choices: [
+            "Port Scanner",
+            "Packet Sniffer",
+            "War Dialer",
+            "Vulnerability Scanner",
+          ],
+          correct: 2,
+        },
+
+        // ── CHAPTER 7 — IDPS (20 questions) ──
+
         // Terminology
         {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "The review of a system's use to determine whether misuse or malfeasance has occurred.",
-          a: 0,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "Decoy systems designed to lure potential attackers away from critical systems.",
+          choices: ["Padded Cells", "Honeypots", "Trap Systems", "Honeynets"],
+          correct: 1,
+        },
+
+        {
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "Several honeypots connected together on a network segment.",
           choices: [
-            "Auditing",
-            "Penetration Testing",
-            "Vulnerability Assessment",
-            "Monitoring",
+            "Padded Cells",
+            "Honeynets",
+            "DMZ Systems",
+            "Trap Networks",
           ],
+          correct: 1,
         },
+
         {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "The process of managing the effects of changes in system configurations through a five-step process.",
-          a: 2,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "A protected honeypot that cannot be easily compromised and seamlessly transfers detected attackers to a special simulated environment.",
           choices: [
-            "Change Control",
-            "Security Planning",
-            "Configuration Management",
-            "Patch Management",
+            "Honeynet",
+            "Trap System",
+            "Padded Cell System",
+            "False Positive Trap",
           ],
+          correct: 2,
         },
+
         {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "A security assessment that simulates attacks by a malicious external source (hacker) to test the effectiveness of defenses.",
-          a: 1,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "The process of collecting publicly available information about a potential target before an attack.",
           choices: [
-            "Vulnerability Scan",
-            "Penetration Testing",
-            "Difference Analysis",
-            "War Dialing",
-          ],
-        },
-        {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "A penetration test approach in which the tester has no prior knowledge of the target system's architecture.",
-          a: 3,
-          choices: ["White Box", "Gray Box", "Blind Test", "Black Box"],
-        },
-        {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "A penetration test approach in which the tester has full knowledge of the target environment's architecture and systems.",
-          a: 0,
-          choices: ["White Box", "Black Box", "Blind Test", "Double Blind"],
-        },
-        {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "A procedure that compares the current state of a network segment against a known previous state to detect unexpected differences.",
-          a: 2,
-          choices: [
-            "Baseline Analysis",
-            "Traffic Analysis",
-            "Difference Analysis",
-            "State Comparison",
-          ],
-        },
-        {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "A modem vulnerability assessment technique that uses scripted automated dialing attacks against a pool of telephone numbers.",
-          a: 1,
-          choices: [
+            "Fingerprinting",
             "Port Scanning",
-            "War Dialing",
-            "Modem Probing",
-            "Dial Mapping",
+            "Footprinting",
+            "Vulnerability Assessment",
           ],
+          correct: 2,
         },
+
         {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "The field that involves preservation, identification, extraction, documentation, and interpretation of digital media for evidentiary and root-cause analysis.",
-          a: 3,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "A systematic survey of a target organization's Internet addresses to identify network services offered by hosts, revealing the internal structure of the network.",
           choices: [
-            "Incident Response",
-            "Digital Forensics",
-            "Threat Intelligence",
-            "Security Auditing",
+            "Footprinting",
+            "Packet Sniffing",
+            "Fingerprinting",
+            "Enumeration",
           ],
+          correct: 2,
         },
+
         {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "Any item or information that applies to an organization's legal or policy-based case, gathered during a digital investigation.",
-          a: 0,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "An IDPS detection method that collects statistical summaries by observing traffic known to be normal, and alerts when measured activity is outside baseline parameters.",
           choices: [
-            "Evidentiary Material (EM)",
-            "Chain of Custody",
-            "Digital Evidence Log",
-            "Forensic Artifact",
+            "Signature-Based Detection",
+            "Stateful Protocol Analysis",
+            "Log File Monitoring",
+            "Anomaly-Based Detection",
           ],
+          correct: 3,
         },
+
         {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "A sworn testimony document that can be used to request a court-authorized right to search for and seize specific evidentiary material at a specified location.",
-          a: 1,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "An IDPS detection method that examines network traffic in search of patterns that match known signatures of attacks.",
           choices: [
-            "Subpoena",
-            "Affidavit / Search Warrant",
-            "Warrant of Arrest",
-            "Legal Hold",
+            "Anomaly-Based Detection",
+            "Stateful Protocol Analysis",
+            "Signature-Based Detection",
+            "Log File Monitoring",
           ],
+          correct: 2,
         },
+
         {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "A digital forensics approach focusing on patching vulnerabilities and defending data systems rather than pursuing offenders.",
-          a: 2,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "The process of comparing known normal protocol profiles against observed traffic; also called deep packet inspection.",
           choices: [
-            "Apprehend and Prosecute",
-            "Pursue and Prosecute",
-            "Protect and Forget",
-            "Chain of Custody",
+            "Anomaly-Based Detection",
+            "Signature-Based Detection",
+            "Stateful Protocol Analysis",
+            "Log File Monitoring",
           ],
+          correct: 2,
         },
+
         {
-          ch: "Chapter 12",
-          type: "terminology",
-          q: "The direct connection of two or more information systems for sharing data and other information resources, which can expose participating organizations to shared risk.",
-          a: 3,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "An IDPS that resides on a computer connected to a network segment and looks for indications of attacks on that segment.",
           choices: [
-            "Network Peering",
-            "Data Federation",
-            "System Integration",
-            "Interconnecting Systems",
+            "Host-Based IDPS",
+            "Log File Monitor",
+            "Network-Based IDPS",
+            "Wireless IDPS",
           ],
+          correct: 2,
         },
+
+        {
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "An IDPS that resides on a particular computer or server and monitors activity only on that system, benchmarking and monitoring key system files.",
+          choices: [
+            "Network-Based IDPS",
+            "Host-Based IDPS",
+            "Wireless IDPS",
+            "Network Behavior Analysis IDPS",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "The act of attracting attention to a system by placing tantalizing information in key locations — this is legal and ethical.",
+          choices: [
+            "Entrapment",
+            "Enticement",
+            "Deception",
+            "Social Engineering",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "The act of luring an individual into committing a crime to get a conviction — this is NOT legal or ethical.",
+          choices: [
+            "Enticement",
+            "Honeypotting",
+            "Entrapment",
+            "Active Deception",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "A network tool that captures copies of packets from a network and analyzes them.",
+          choices: [
+            "Port Scanner",
+            "Vulnerability Scanner",
+            "Packet Sniffer",
+            "Firewall Analysis Tool",
+          ],
+          correct: 2,
+        },
+
         // Fundamentals
         {
-          ch: "Chapter 12",
-          type: "fundamental",
-          q: "What are the five subject areas of the Security Maintenance Model described in Chapter 12?",
-          a: 0,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "Which advantage do NIDPSs have over other monitoring approaches?",
           choices: [
-            "External monitoring, Internal monitoring, Planning & risk assessment, Vulnerability assessment & remediation, Readiness & review",
-            "Auditing, Patching, Training, Testing, Reporting",
-            "Risk identification, Risk analysis, Risk mitigation, Risk transfer, Risk acceptance",
-            "Policy review, Personnel review, Technical review, Vendor review, Compliance review",
+            "They can analyze encrypted packets",
+            "They are usually passive and can be deployed with little disruption",
+            "They monitor only a single host",
+            "They require no access to network traffic",
           ],
+          correct: 1,
         },
+
         {
-          ch: "Chapter 12",
-          type: "fundamental",
-          q: "What is the primary objective of external monitoring in the Security Maintenance Model?",
-          a: 3,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "Which is a key disadvantage of Host-Based IDPSs (HIDPSs)?",
           choices: [
-            "To audit employee activity",
-            "To scan internal servers daily",
-            "To monitor vendor contracts",
-            "To provide early awareness of new threats, vulnerabilities, and attacks",
+            "Cannot detect local events on host systems",
+            "Cannot access encrypted traffic",
+            "Vulnerable to direct attacks and attacks against host OS",
+            "Cannot detect inconsistencies in application logs",
           ],
+          correct: 2,
         },
+
         {
-          ch: "Chapter 12",
-          type: "fundamental",
-          q: "Which type of vulnerability assessment is specifically designed to find vulnerabilities in publicly accessible wireless networks?",
-          a: 1,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "NIST recommends deploying NIDPS sensors in four locations. Which is NOT one of them?",
           choices: [
-            "Intranet Vulnerability Assessment",
-            "Wireless Vulnerability Assessment",
-            "Internet Vulnerability Assessment",
-            "Platform Security Validation",
+            "Behind each external firewall in the DMZ",
+            "Outside an external firewall",
+            "On major network backbones",
+            "Inside each individual workstation",
           ],
+          correct: 3,
         },
+
         {
-          ch: "Chapter 12",
-          type: "fundamental",
-          q: "According to Chapter 12, what should a vulnerability database provide to be effective?",
-          a: 2,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "An IDPS control strategy where all IDPS control functions are implemented and managed in a single central location is called:",
           choices: [
-            "Real-time alerts only",
-            "Just a list of CVE IDs",
-            "Details about vulnerabilities and a link to the affected information assets",
-            "A dashboard visible to all employees",
+            "Fully Distributed",
+            "Partially Distributed",
+            "Centralized",
+            "Decentralized",
           ],
+          correct: 2,
         },
+
         {
-          ch: "Chapter 12",
-          type: "fundamental",
-          q: "NIST SP 800-100 covers how many areas of information security management?",
-          a: 0,
-          choices: ["13", "10", "7", "15"],
-        },
-        {
-          ch: "Chapter 12",
-          type: "fundamental",
-          q: "Which approach to risk remediation involves simply acknowledging risk as part of the organization's business process or transferring it via insurance?",
-          a: 3,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "Which type of IDPS examines traffic flow on a network in an attempt to recognize abnormal patterns and commonly detects DoS attacks and worms?",
           choices: [
-            "Vulnerability Repair",
-            "Threat Removal",
-            "Patch Management",
-            "Acceptance or Transference of Risk",
+            "Wireless NIDPS",
+            "Host-Based IDPS",
+            "Network Behavior Analysis IDPS",
+            "Log File Monitor",
           ],
+          correct: 2,
         },
+
         {
-          ch: "Chapter 12",
-          type: "fundamental",
-          q: "What does the System Development Life Cycle (SDLC) refer to in the context of NIST SP 800-100?",
-          a: 1,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "IDPSs are evaluated using four dominant metrics. Which of the following is NOT one of them?",
           choices: [
-            "A software coding methodology",
-            "The overall process of developing, implementing, and retiring information systems through a multistep process",
-            "A risk scoring framework",
-            "A hardware procurement model",
+            "Thresholds",
+            "Blacklists and Whitelists",
+            "Alert Settings",
+            "Firewall Rules",
           ],
+          correct: 3,
         },
+
         {
-          ch: "Chapter 12",
-          type: "fundamental",
-          q: "Why are larger information security projects recommended to be broken into smaller projects?",
-          a: 2,
+          ch: "ch7",
+          chapter: "Ch.7 · Intrusion Detection & Prevention",
+          q: "A logical sequence of steps or processes used by an attacker to launch an attack against a target system is called:",
           choices: [
-            "Smaller projects are easier to outsource",
-            "Smaller projects cost less",
-            "Smaller projects have more manageable impacts, reduce uncertainty, and allow for course corrections",
-            "Smaller projects require fewer personnel",
+            "Attack Signature",
+            "Exploit Vector",
+            "Attack Protocol",
+            "Threat Vector",
           ],
+          correct: 2,
+        },
+
+        // ── CHAPTER 8 — CRYPTOGRAPHY (20 questions) ──
+
+        // Terminology
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "The science of encryption that encompasses both cryptography and cryptanalysis.",
+          choices: [
+            "Cryptography",
+            "Steganography",
+            "Cryptology",
+            "Cryptanalysis",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "The practice of cracking or breaking encrypted messages back into their original unencrypted form.",
+          choices: [
+            "Cryptography",
+            "Cryptology",
+            "Steganography",
+            "Cryptanalysis",
+          ],
+          correct: 3,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "The art of hiding information within other files, such as digital pictures, so the existence of the message is concealed.",
+          choices: [
+            "Cryptography",
+            "Steganography",
+            "Transposition",
+            "Substitution",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "Unencrypted, human-readable data before it is processed by a cryptographic algorithm.",
+          choices: ["Ciphertext", "Algorithm", "Plaintext", "Key"],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "The variable that is applied in combination with a cryptographic algorithm to encrypt or decrypt a message.",
+          choices: [
+            "Ciphertext",
+            "Algorithm",
+            "Work Factor",
+            "Key / Cryptovariable",
+          ],
+          correct: 3,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "A cipher method that rearranges values within a block to create ciphertext without substituting values.",
+          choices: [
+            "Substitution Cipher",
+            "Bit Stream Cipher",
+            "Transposition Cipher",
+            "Vernam Cipher",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "A cipher in which each plaintext bit is transformed into a cipher bit one bit at a time.",
+          choices: [
+            "Block Cipher",
+            "Transposition Cipher",
+            "Bit Stream Cipher",
+            "Substitution Cipher",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "An encryption method that requires the same secret key to both encrypt and decrypt the message, also known as private-key encryption.",
+          choices: [
+            "Asymmetric Encryption",
+            "Hash Function",
+            "Public-Key Encryption",
+            "Symmetric Encryption",
+          ],
+          correct: 3,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "An encryption method that uses two different but mathematically related keys — one public and one private.",
+          choices: [
+            "Symmetric Encryption",
+            "Vernam Cipher",
+            "Asymmetric Encryption",
+            "Hash Function",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "A mathematical algorithm used to confirm message identity and that no content has changed; does not require a key.",
+          choices: [
+            "Digital Signature",
+            "Symmetric Key",
+            "Hash Function",
+            "Certificate Authority",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "The process that verifies a message was sent by the sender and thus cannot be refuted.",
+          choices: [
+            "Authentication",
+            "Integrity",
+            "Nonrepudiation",
+            "Authorization",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "An electronic document containing a key value and identifying information about the entity that controls the key.",
+          choices: [
+            "Digital Signature",
+            "Public Key",
+            "Digital Certificate",
+            "Registration Authority",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "An integrated system of software, encryption methodologies, protocols, legal agreements, and third-party services enabling users to communicate securely.",
+          choices: [
+            "Digital Signature Standard",
+            "Public-Key Infrastructure",
+            "Certificate Authority",
+            "Hybrid Cryptosystem",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "A protocol that uses public key encryption to secure a channel over the public Internet, commonly used for secure web browsing.",
+          choices: ["S-HTTP", "PGP", "IPSec", "SSL"],
+          correct: 3,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "An open-source hybrid cryptosystem designed in 1991 by Phil Zimmermann, providing authentication and encryption for email and file storage.",
+          choices: ["S/MIME", "SSL", "PGP", "SET"],
+          correct: 2,
+        },
+
+        // Fundamentals
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "Data Encryption Standard (DES) uses which key size?",
+          choices: ["128-bit", "64-bit", "56-bit", "256-bit"],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "Which encryption standard was developed to replace both DES and 3DES?",
+          choices: [
+            "RSA",
+            "Vigenère",
+            "Advanced Encryption Standard (AES)",
+            "Diffie-Hellman",
+          ],
+          correct: 2,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "The RSA algorithm is significant because it was:",
+          choices: [
+            "The first block cipher ever created",
+            "The first public-key encryption algorithm published for commercial use",
+            "The basis for DES encryption",
+            "The encryption used in WEP protocols",
+          ],
+          correct: 1,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "Wired Equivalent Privacy (WEP) was created to provide security for which network protocol?",
+          choices: ["802.11 (Wi-Fi)", "Bluetooth", "Ethernet", "TCP/IP"],
+          correct: 0,
+        },
+
+        {
+          ch: "ch8",
+          chapter: "Ch.8 · Cryptography",
+          q: "Which protocol was developed by MasterCard and VISA in 1997 to protect against electronic payment fraud on the Internet?",
+          choices: [
+            "SSL",
+            "S-HTTP",
+            "IPSec",
+            "Secure Electronic Transactions (SET)",
+          ],
+          correct: 3,
         },
       ];
 
-      // ============================================================
+      // ═══════════════════════════════════════════════
       //  QUIZ STATE
-      // ============================================================
+      // ═══════════════════════════════════════════════
       let questions = [];
       let current = 0;
-      let userAnswers = []; // null = unanswered, index = answered
-      let score = 0;
-      let reviewVisible = false;
+      let answers = []; // answers[i] = original choice index chosen, or -1
+      let choiceOrders = []; // choiceOrders[i] = fixed shuffled order for question i
 
       function shuffle(arr) {
         const a = [...arr];
@@ -1592,32 +1791,26 @@
         return a;
       }
 
-      function initQuiz() {
-        // Shuffle questions and shuffle choices within each question
-        questions = shuffle(ALL_QUESTIONS).map((q) => {
-          // Build choices array with original answer tracking
-          const choicesWithIdx = q.choices.map((c, i) => ({
-            text: c,
-            isCorrect: i === q.a,
-          }));
-          const shuffled = shuffle(choicesWithIdx);
-          const newCorrectIdx = shuffled.findIndex((c) => c.isCorrect);
-          return {
-            ...q,
-            choices: shuffled.map((c) => c.text),
-            a: newCorrectIdx,
-          };
-        });
-
-        userAnswers = new Array(questions.length).fill(null);
-        score = 0;
+      function startQuiz() {
+        questions = shuffle([...ALL_QUESTIONS]);
+        answers = new Array(questions.length).fill(-1);
+        // Pre-generate a fixed shuffled choice order for every question
+        choiceOrders = questions.map(() => shuffle([0, 1, 2, 3]));
         current = 0;
-
-        document.getElementById("quiz-panel").style.display = "block";
-        document.getElementById("score-panel").style.display = "none";
-        reviewVisible = false;
-
+        showScreen("quiz-screen");
+        document.getElementById("progress-wrap").style.display = "";
         renderQuestion();
+      }
+
+      function showScreen(id) {
+        ["start-screen", "quiz-screen", "result-screen"].forEach((s) => {
+          const el = document.getElementById(s);
+          el.classList.remove("active");
+          el.style.display = "none";
+        });
+        const target = document.getElementById(id);
+        target.style.display = "block";
+        setTimeout(() => target.classList.add("active"), 10);
       }
 
       function renderQuestion() {
@@ -1625,85 +1818,89 @@
         const total = questions.length;
 
         // Progress
-        const pct = ((current + 1) / total) * 100;
-        document.getElementById("progress-fill").style.width = pct + "%";
-        document.getElementById("progress-text").textContent =
+        document.getElementById("q-counter").textContent =
           `Question ${current + 1} of ${total}`;
-        document.getElementById("score-live").textContent = `Score: ${score}`;
+        document.getElementById("pb-fill").style.width =
+          `${((current + 1) / total) * 100}%`;
 
-        // Chapter badge
-        document.getElementById("q-chapter").textContent =
-          q.ch +
-          " · " +
-          (q.type === "terminology" ? "Terminology" : "Fundamental");
-        document.getElementById("q-number").textContent = `Q${current + 1}`;
+        // Live score
+        const scored = answers.filter(
+          (a, i) => a !== -1 && a === questions[i].correct,
+        ).length;
+        document.getElementById("score-live").textContent = `Score: ${scored}`;
+
+        // Chapter tag
+        const tag = document.getElementById("q-chapter");
+        tag.className = `chapter-tag ${q.ch}`;
+        tag.textContent = q.chapter;
+
+        // Question text
         document.getElementById("q-text").textContent = q.q;
 
-        // Reset animation
-        const card = document.getElementById("question-card");
-        card.style.animation = "none";
-        card.offsetHeight; // reflow
-        card.style.animation = "slideUp 0.3s ease";
+        // Use pre-stored fixed choice order for this question
+        const choiceOrder = choiceOrders[current];
 
         // Choices
-        const list = document.getElementById("choices-list");
-        list.innerHTML = "";
+        const container = document.getElementById("choices");
+        container.innerHTML = "";
         const letters = ["A", "B", "C", "D"];
-        q.choices.forEach((choice, i) => {
-          const li = document.createElement("li");
-          const answered = userAnswers[current] !== null;
-          const isSelected = userAnswers[current] === i;
-          const isCorrect = i === q.a;
+        const answered = answers[current] !== -1;
 
-          let cls = "choice-btn";
+        choiceOrder.forEach((origIdx, newIdx) => {
+          const btn = document.createElement("button");
+          btn.className = "choice-btn" + (answered ? " locked" : "");
+          btn.dataset.newIdx = newIdx;
+          btn.dataset.origIdx = origIdx;
+
+          // Build inner HTML
+          const isChosen = answered && answers[current] === origIdx;
+          const isCorrect = origIdx === q.correct;
+
           if (answered) {
-            if (isCorrect) cls += " correct";
-            else if (isSelected) cls += " wrong";
-          } else if (isSelected) cls += " selected";
+            if (isCorrect) btn.classList.add("correct");
+            else if (isChosen) btn.classList.add("wrong");
+          }
 
-          li.innerHTML = `<button class="${cls}" ${answered ? "disabled" : ""} onclick="selectAnswer(${i})">
-      <span class="choice-letter">${letters[i]}</span>
-      <span>${choice}</span>
-    </button>`;
-          list.appendChild(li);
+          btn.innerHTML = `
+      <span class="choice-letter">${letters[newIdx]}</span>
+      <span class="choice-text">${q.choices[origIdx]}</span>
+      <span class="result-icon">${isCorrect && answered ? '<i class="fa-solid fa-check"></i>' : !isCorrect && isChosen && answered ? '<i class="fa-solid fa-xmark"></i>' : ""}</span>
+    `;
+
+          if (!answered) {
+            btn.addEventListener("click", () => selectAnswer(origIdx));
+          }
+          container.appendChild(btn);
         });
 
-        // Feedback
-        const fb = document.getElementById("feedback-msg");
-        if (userAnswers[current] !== null) {
-          const correct = userAnswers[current] === q.a;
-          fb.className = "feedback-msg " + (correct ? "correct" : "wrong");
-          fb.style.display = "block";
-          fb.textContent = correct
-            ? "✓ Correct!"
-            : `✗ Incorrect. The correct answer is: ${q.choices[q.a]}`;
-        } else {
-          fb.style.display = "none";
-        }
+        // Next/Finish button
+        const isLast = current === total - 1;
+        const nextBtn = document.getElementById("btn-next");
+        nextBtn.innerHTML = isLast
+          ? '<i class="fa-solid fa-flag-checkered"></i> Finish'
+          : '<i class="fa-solid fa-arrow-right"></i> Next';
+        nextBtn.className = `btn-nav ${isLast ? "btn-finish" : "btn-next"}`;
+        nextBtn.disabled = answers[current] === -1;
 
-        // Buttons
+        // Back button
         document.getElementById("btn-back").disabled = current === 0;
-        document.getElementById("btn-next").textContent =
-          current === total - 1 ? "Finish →" : "Next →";
-        // Disable next if not answered
-        document.getElementById("btn-next").disabled =
-          userAnswers[current] === null;
+        document.getElementById("btn-back").style.opacity =
+          current === 0 ? ".4" : "1";
       }
 
-      function selectAnswer(idx) {
-        if (userAnswers[current] !== null) return; // already answered
-        const q = questions[current];
-        userAnswers[current] = idx;
-        if (idx === q.a) score++;
-        renderQuestion();
+      function selectAnswer(origIdx) {
+        if (answers[current] !== -1) return; // locked
+        answers[current] = origIdx;
+        renderQuestion(); // re-render to show result
       }
 
       function goNext() {
         if (current < questions.length - 1) {
           current++;
           renderQuestion();
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
-          showScore();
+          showResults();
         }
       }
 
@@ -1711,106 +1908,136 @@
         if (current > 0) {
           current--;
           renderQuestion();
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       }
 
-      function confirmReset() {
-        if (confirm("Reset the quiz? All progress will be lost.")) resetQuiz();
-      }
-
-      function resetQuiz() {
-        initQuiz();
-      }
-
-      function showScore() {
-        document.getElementById("quiz-panel").style.display = "none";
-        const sp = document.getElementById("score-panel");
-        sp.style.display = "block";
+      function showResults() {
+        document.getElementById("progress-wrap").style.display = "none";
+        showScreen("result-screen");
 
         const total = questions.length;
-        const pct = Math.round((score / total) * 100);
+        let correct = 0,
+          wrong = 0,
+          skipped = 0;
+        answers.forEach((a, i) => {
+          if (a === -1) skipped++;
+          else if (a === questions[i].correct) correct++;
+          else wrong++;
+        });
 
-        document.getElementById("score-final").textContent =
-          `${score}/${total}`;
-        document.getElementById("bar-correct-val").textContent = score;
-        document.getElementById("bar-wrong-val").textContent = total - score;
-        document.getElementById("bar-pct-val").textContent = pct + "%";
-        document.getElementById("bar-correct").style.width = pct + "%";
-        document.getElementById("bar-wrong").style.width = 100 - pct + "%";
-        document.getElementById("bar-pct").style.width = pct + "%";
+        const pct = Math.round((correct / total) * 100);
 
-        let grade, gradeClass, msg;
-        if (pct >= 95) {
-          grade = "S — Outstanding!";
-          gradeClass = "grade-s";
-          msg = "Exceptional mastery. You are ready for the exam.";
-        } else if (pct >= 85) {
-          grade = "A — Excellent";
-          gradeClass = "grade-a";
-          msg = "Strong understanding across all chapters.";
-        } else if (pct >= 75) {
-          grade = "B — Good";
-          gradeClass = "grade-b";
-          msg = "Solid foundation. Review the missed items.";
-        } else if (pct >= 65) {
-          grade = "C — Average";
-          gradeClass = "grade-c";
-          msg = "Passing, but revisit weak areas.";
+        // Score ring
+        document
+          .getElementById("score-ring")
+          .style.setProperty("--pct", `${pct}% 100%`);
+        document.getElementById("score-ring").style.background =
+          `conic-gradient(var(--accent) ${pct}%, var(--border) 0)`;
+        document.getElementById("score-pct").textContent = `${pct}%`;
+
+        // Grade
+        let grade, msg;
+        if (pct >= 90) {
+          grade = "🏆 Outstanding!";
+          msg = "Exceptional mastery of information security concepts.";
+        } else if (pct >= 80) {
+          grade = "🎉 Excellent!";
+          msg = "Strong understanding — just a few gaps to review.";
+        } else if (pct >= 70) {
+          grade = "👍 Good Job";
+          msg = "Solid foundation — review the highlighted questions.";
+        } else if (pct >= 60) {
+          grade = "📚 Keep Studying";
+          msg = "You're getting there — check the review section carefully.";
         } else {
-          grade = "F — Needs Work";
-          gradeClass = "grade-f";
-          msg = "Keep studying — re-read the chapters and try again.";
+          grade = "💡 Need More Practice";
+          msg = "Don't give up! Review each chapter and try again.";
         }
 
-        const badge = document.getElementById("score-grade-badge");
-        badge.textContent = grade;
-        badge.className = "score-grade " + gradeClass;
-        document.getElementById("score-message").textContent = msg;
+        document.getElementById("result-grade").textContent = grade;
+        document.getElementById("result-msg").textContent = msg;
+        document.getElementById("r-correct").textContent = correct;
+        document.getElementById("r-wrong").textContent = wrong;
+        document.getElementById("r-skip").textContent = skipped;
 
+        // Review list
         buildReview();
       }
 
       function buildReview() {
-        const section = document.getElementById("review-section");
-        section.innerHTML = "";
+        const list = document.getElementById("review-list");
+        list.innerHTML = "";
+
         questions.forEach((q, i) => {
-          const userAns = userAnswers[i];
-          const correct = userAns === q.a;
-          const item = document.createElement("div");
-          item.className = "review-item " + (correct ? "correct" : "wrong");
+          const chosen = answers[i];
+          const isCorrect = chosen !== -1 && chosen === q.correct;
+          const isSkipped = chosen === -1;
+          const isWrong = !isCorrect && !isSkipped;
 
-          let answersHTML = q.choices
-            .map((c, ci) => {
-              let cls = "r-neutral";
-              if (ci === q.a) cls = "r-correct";
-              else if (ci === userAns && !correct) cls = "r-wrong";
-              return `<div class="review-ans-row ${cls}">
-        <div class="dot"></div>
-        <span>${c}${ci === q.a ? " ✓" : ""}${ci === userAns && !correct ? " ✗" : ""}</span>
-      </div>`;
-            })
-            .join("");
+          const div = document.createElement("div");
+          div.className = `review-item ${isCorrect ? "ri-correct" : isWrong ? "ri-wrong" : "ri-skip"}`;
 
-          item.innerHTML = `
-      <div class="review-chapter">${q.ch} · ${q.type}</div>
-      <div class="review-q"><strong>Q${i + 1}:</strong> ${q.q}</div>
-      <div class="review-answers">${answersHTML}</div>`;
-          section.appendChild(item);
+          const statusLabel = isCorrect
+            ? "Correct"
+            : isWrong
+              ? "Wrong"
+              : "Skipped";
+          const statusClass = isCorrect
+            ? "correct"
+            : isWrong
+              ? "wrong"
+              : "skip";
+
+          let answersHtml = "";
+          if (!isCorrect) {
+            const yourAns = chosen !== -1 ? q.choices[chosen] : "—";
+            const correctAns = q.choices[q.correct];
+            answersHtml = `
+        <div class="ri-answers">
+          <div class="ri-ans-box your-ans ${isWrong ? "wrong" : ""}">
+            <div class="lbl">Your answer</div>
+            <div>${yourAns}</div>
+          </div>
+          <div class="ri-ans-box correct-ans">
+            <div class="lbl">Correct answer</div>
+            <div>${correctAns}</div>
+          </div>
+        </div>
+      `;
+          }
+
+          div.innerHTML = `
+      <div class="ri-top">
+        <span class="ri-num">#${i + 1}</span>
+        <span class="ri-q">${q.q}</span>
+        <span class="ri-badge ${statusClass}">${statusLabel}</span>
+      </div>
+      ${answersHtml}
+    `;
+          list.appendChild(div);
         });
       }
 
-      function toggleReview() {
-        reviewVisible = !reviewVisible;
-        const sec = document.getElementById("review-section");
-        const btn = document.getElementById("review-toggle-btn");
-        sec.style.display = reviewVisible ? "block" : "none";
-        btn.textContent = reviewVisible
-          ? "▲ Hide Answer Review"
-          : "▼ Show Answer Review";
+      function confirmReset() {
+        if (answers.some((a) => a !== -1)) {
+          showToast("Resetting quiz...");
+          setTimeout(() => {
+            document.getElementById("progress-wrap").style.display = "none";
+            showScreen("start-screen");
+          }, 600);
+        } else {
+          showScreen("start-screen");
+          document.getElementById("progress-wrap").style.display = "none";
+        }
       }
 
-      // Start
-      initQuiz();
+      function showToast(msg) {
+        const t = document.getElementById("toast");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 2000);
+      }
     </script>
   </body>
 </html>
